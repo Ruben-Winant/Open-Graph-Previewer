@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <h1>Open Graph Previewer</h1>
+  <section>
+    <form action="">
+      <fieldset>
+        <input type="text" name="targetUrl" id="targetUrl" placeholder="Target url">
+        <button id="previewButton">Preview</button><span>or</span>
+        <button id="currentSiteButton">Current</button>
+      </fieldset>
+    </form>
+  </section>
+
+  <h2>Previews</h2>
+  <section class="tabContainer">
+    <div class="tabset">
+      <input type="radio" name="tabset" id="tab1" aria-controls="Default" checked>
+      <label for="tab1"><b>Default</b></label>
+      <input type="radio" name="tabset" id="tab2" aria-controls="Facebook">
+      <label for="tab2"><b>Facebook</b></label>
+      <input type="radio" name="tabset" id="tab3" aria-controls="X">
+      <label for="tab3"><b>X</b></label>
+      <div class="tab-panels">
+        <section id="default" class="tab-panel">
+          <p><strong>Overall Impression:</strong> An elegant, malty German</p>
+        </section>
+        <section id="facebook" class="tab-panel">
+          <p><strong>Overall Impression:</strong> An elegant, malty German</p>
+        </section>
+        <section id="x" class="tab-panel">
+          <p><strong>Overall Impression:</strong> An elegant, malty German</p>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <script src="devtools-panel.js"></script>
+</body>
+
+</html>

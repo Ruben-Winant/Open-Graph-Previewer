@@ -1,0 +1,15 @@
+{
+  "description": "See how your website will look on social media with every possible Open Graph configuration.",
+  "manifest_version": 2,
+  "name": "Open Graph Previewer",
+  "version": "0.0.1",
+  "author": "Ruben Winant",
+  "icons": {
+    "48": "icons/star.png"
+  },
+  "background": {
+    "scripts": ["background_scripts/background.js"]
+  },
+  "permissions": ["<all_urls>"],
+  "devtools_page": "devtools/devtools-page.html"
+}
