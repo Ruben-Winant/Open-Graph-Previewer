@@ -199,7 +199,6 @@ const getMetaTags = () => {
           const key = metaTag.property ?? metaTag.name;
           const value = metaTag.content;
 
-          // Add key-value pair if key and value are truthy
           if (key && value) {
             tags[key] = value;
           }
@@ -219,5 +218,6 @@ browser.runtime.onMessage.addListener((message) => {
   if (message.action === "refresh") {
     console.log("yooo");
     browser.devtools.inspectedWindow.eval(`console.log('test');`);
+    getMetaTags();
   }
 });

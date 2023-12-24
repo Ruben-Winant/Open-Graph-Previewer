@@ -1,6 +1,6 @@
 {
   "description": "Preview how your website looks on social media with every Open Graph configuration, instantly.",
-  "manifest_version": 3,
+  "manifest_version": 2,
   "name": "Open Graph Previewer",
   "version": "0.0.2",
   "author": "Ruben Winant",
@@ -11,6 +11,10 @@
     "scripts": ["/og-previewer-background.js"],
     "persistent": false
   },
-  "permissions": ["<all_urls>"],
-  "devtools_page": "devtools/devtools-page.html"
+  "permissions": ["activeTab"],
+  "devtools_page": "devtools/devtools-page.html",
+  "browser_action": {
+    "default_title": "Open Graph Previewer",
+    "default_popup": "popup/info.html"
+  }
 }
