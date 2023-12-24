@@ -9,37 +9,180 @@
 
 <body>
   <h1>Open Graph Previewer</h1>
-  <section>
-    <form action="">
-      <fieldset>
-        <input type="text" name="targetUrl" id="targetUrl" placeholder="Target url">
-        <button id="previewButton">Preview</button><span>or</span>
-        <button id="currentSiteButton">Current</button>
-      </fieldset>
-    </form>
-  </section>
+  <p id="test">This extension is in active development, if you encouter any bugs or want to request a new feature feel
+    free
+    to shoot me a message on <a href="https://twitter.com/ruben_winant">X</a></p>
 
-  <h2>Previews</h2>
   <section class="tabContainer">
     <div class="tabset">
       <input type="radio" name="tabset" id="tab1" aria-controls="Default" checked>
-      <label for="tab1"><b>Default</b></label>
+      <label for="tab1">
+        <svg xmlns="http://www.w3.org/2000/svg" height="16" width="18"
+          viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
+          <path
+            d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z" />
+        </svg>
+      </label>
       <input type="radio" name="tabset" id="tab2" aria-controls="Facebook">
-      <label for="tab2"><b>Facebook</b></label>
+      <label for="tab2">
+        <svg xmlns="http://www.w3.org/2000/svg" height="16" width="10"
+          viewBox="0 0 320 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
+          <path
+            d="M80 299.3V512H196V299.3h86.5l18-97.8H196V166.9c0-51.7 20.3-71.5 72.7-71.5c16.3 0 29.4 .4 37 1.2V7.9C291.4 4 256.4 0 236.2 0C129.3 0 80 50.5 80 159.4v42.1H14v97.8H80z" />
+        </svg>
+      </label>
       <input type="radio" name="tabset" id="tab3" aria-controls="X">
-      <label for="tab3"><b>X</b></label>
+      <label for="tab3">
+        <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16"
+          viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
+          <path
+            d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z" />
+        </svg>
+      </label>
       <div class="tab-panels">
         <section id="default" class="tab-panel">
-          <p><strong>Overall Impression:</strong> An elegant, malty German</p>
+          <table id="tagTable">
+            <tr>
+              <th>Name/Property</th>
+              <th>Content</th>
+            </tr>
+          </table>
         </section>
         <section id="facebook" class="tab-panel">
-          <p><strong>Overall Impression:</strong> An elegant, malty German</p>
+          <div id="fb_recommendations">
+            <h4>Recommendations</h4>
+            <p>Consider adding the following meta data to enhance your content.</p>
+            <ul></ul>
+          </div>
+          <h4>Previews</h4>
+          <br>
+          <div id="facebook_previews">
+            <div id="fb_links">
+              <div class="fb_link_container_outer_light">
+                <div class="square_image_container_light">
+                  <img src="" alt="" srcset="">
+                </div>
+                <div class="text_container_light">
+                  <span class="fb_site_domain_light"></span>
+                  <br>
+                  <span class="fb_link_title_light"></span>
+                  <br>
+                  <span class="link_description_light">
+                  </span>
+                </div>
+              </div>
+              <br>
+              <div class="fb_link_container_outer_dark">
+                <div class="square_image_container_dark">
+                  <img src="" alt="" srcset="">
+                </div>
+                <div class="text_container_dark">
+                  <span class="fb_site_domain_dark"></span>
+                  <br>
+                  <span class="fb_link_title_dark"></span>
+                  <br>
+                  <span class="link_description_dark">
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div id="fb_article">
+              <div class="fb_article_container_outer_light">
+                <div class="rectangle_image_container_light">
+                  <img src="" alt="" srcset="">
+                </div>
+                <div class="text_container_light">
+                  <span class="fb_site_domain_light"></span>
+                  <br>
+                  <span class="fb_link_title_light"></span>
+                  <br>
+                  <span class="link_description_light">
+                  </span>
+                </div>
+              </div>
+              <br>
+              <div class="fb_article_container_outer_dark">
+                <div class="rectangle_image_container_dark">
+                  <img src="" alt="" srcset="">
+                </div>
+                <div class="text_container_dark">
+                  <span class="fb_site_domain_dark"></span>
+                  <br>
+                  <span class="fb_link_title_dark"></span>
+                  <br>
+                  <span class="link_description_dark">
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
         <section id="x" class="tab-panel">
-          <p><strong>Overall Impression:</strong> An elegant, malty German</p>
+          <div id="x_recommendations">
+            <h4>Recommendations</h4>
+            <p>Consider adding the following meta data to enhance your content.</p>
+            <ul></ul>
+          </div>
+          <h4>Previews</h4>
+          <br>
+          <div id="x_previews">
+            <!-- Light theme -->
+            <div id="x_light_card" class="twitter_article_container_outer_light">
+              <div class="twitter_image_container">
+                <img src="" alt="" srcset="">
+              </div>
+              <div class="twitter_text_container_light">
+                <span class="twitter_site_domain_light"></span>
+                <br>
+                <span class="twitter_link_title_light"></span>
+                <br>
+                <span class="twitter_link_description_light">
+                </span>
+              </div>
+            </div>
+            <br>
+            <!-- Dim theme -->
+            <div id="x_dim_card" class="twitter_article_container_outer_dim">
+              <div class="twitter_image_container_dim">
+                <img src="" alt="" srcset="">
+              </div>
+              <div class="twitter_text_container_dim">
+                <span class="twitter_site_domain_dim"></span>
+                <br>
+                <span class="twitter_link_title_dim"></span>
+                <br>
+                <span class="twitter_link_description_dim">
+                </span>
+              </div>
+            </div>
+            <br>
+            <!-- Dark theme -->
+            <div id="x_dark_card" class="twitter_article_container_outer_dark">
+              <div class="twitter_image_container_dark">
+                <img src="" alt="" srcset="">
+              </div>
+              <div class="twitter_text_container_dark">
+                <span class="twitter_site_domain_dark"></span>
+                <br>
+                <span class="twitter_link_title_dark"></span>
+                <br>
+                <span class="twitter_link_description_dark">
+                </span>
+              </div>
+            </div>
+          </div>
+
         </section>
       </div>
     </div>
+  </section>
+
+  <section>
+    <p>By using this extension you're supporting me more than enough, but if you'd like to support me financially as
+      well, feel free
+      to buy me a beer.</p>
+    <a href="https://www.buymeacoffee.com/rubenwinant"><img
+        src="https://img.buymeacoffee.com/button-api/?text=Buy me a beer&emoji=🍺&slug=rubenwinant&button_colour=BD5FFF&font_colour=ffffff&font_family=Cookie&outline_colour=000000&coffee_colour=FFDD00" /></a>
   </section>
 
   <script src="devtools-panel.js"></script>
