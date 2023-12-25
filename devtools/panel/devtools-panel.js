@@ -25,6 +25,7 @@ const handleFacebookData = (tags) => {
 
   let recomsFound = false;
   let recoms = document.querySelector("#fb_recommendations ul");
+  recoms.innerHTML = "";
   recommended.forEach((recommendation) => {
     if (undefined === tags[recommendation]) {
       recomsFound = true;
@@ -34,15 +35,19 @@ const handleFacebookData = (tags) => {
     }
   });
 
+  const fb_links = document.getElementById("fb_links");
+  const fb_article = document.getElementById("fb_article");
+  const facebook_previews = document.getElementById("facebook_previews");
+  const fb_recommendations = document.getElementById("fb_recommendations");
+
   if (recomsFound) {
-    document.getElementById("fb_recommendations").style.display = "block";
+    fb_recommendations.style.display = "block";
   }
 
   if (undefined === tags["og:title"]) {
-    document.getElementById("fb_article").style.display = "none";
-    document.getElementById("fb_links").style.display = "none";
-    document.getElementById("facebook_previews").innerHTML =
-      "<p>Insufficient data found.</p>";
+    fb_article.style.display = "none";
+    fb_links.style.display = "none";
+    facebook_previews.innerHTML = "<p>Insufficient data found.</p>";
     return;
   }
 
@@ -75,12 +80,12 @@ const handleFacebookData = (tags) => {
   // Show either link or article styling
   switch (tags["og:type"]) {
     case "link":
-      document.getElementById("fb_links").style.display = "block";
-      document.getElementById("fb_article").style.display = "none";
+      fb_links.style.display = "block";
+      fb_article.style.display = "none";
       break;
     default:
-      document.getElementById("fb_links").style.display = "none";
-      document.getElementById("fb_article").style.display = "block";
+      fb_links.style.display = "none";
+      fb_article.style.display = "block";
       break;
   }
 };
@@ -97,6 +102,7 @@ const handleTwitterData = (tags) => {
 
   let recomsFound = false;
   let recoms = document.querySelector("#x_recommendations ul");
+  recoms.innerHTML = "";
   recommended.forEach((recommendation) => {
     if (undefined === tags[recommendation]) {
       recomsFound = true;
@@ -106,24 +112,29 @@ const handleTwitterData = (tags) => {
     }
   });
 
+  const x_light_card = document.getElementById("x_light_card");
+  const x_dim_card = document.getElementById("x_dim_card");
+  const x_dark_card = document.getElementById("x_dark_card");
+  const x_previews = document.getElementById("x_previews");
+  const x_recommendations = document.getElementById("x_recommendations");
+
   if (recomsFound) {
-    document.getElementById("x_recommendations").style.display = "block";
+    x_recommendations.style.display = "block";
   }
 
   if (
     undefined === tags["twitter:title"] ||
     undefined === tags["twitter:card"]
   ) {
-    document.getElementById("x_light_card").style.display = "none";
-    document.getElementById("x_dim_card").style.display = "none";
-    document.getElementById("x_dark_card").style.display = "none";
-    document.getElementById("x_previews").innerHTML =
-      "<p>Insufficient data found.</p>";
+    x_light_card.style.display = "none";
+    x_dim_card.style.display = "none";
+    x_dark_card.style.display = "none";
+    x_previews.innerHTML = "<p>Insufficient data found.</p>";
     return;
   }
 
   // Images
-  if (undefined === tags["og:image"]) {
+  if (undefined === tags["og:image"] && undefined === tags["twitter:image"]) {
     document
       .querySelectorAll("#x img")
       .forEach((el) => (el.style.display = "none"));
@@ -153,6 +164,8 @@ const handleTwitterData = (tags) => {
       ".twitter_link_description_light, .twitter_link_description_dim, .twitter_link_description_dark"
     )
     .forEach((el) => (el.textContent = tags["og:description"]));
+
+  // Todo add switch to go over all possible card types and add designs
 };
 
 /**
@@ -161,6 +174,7 @@ const handleTwitterData = (tags) => {
  */
 const addTableRow = (tags) => {
   const table = document.getElementById("tagTable");
+  table.innerHTML = "";
 
   Object.entries(tags)
     .sort()
@@ -179,6 +193,7 @@ const addTableRow = (tags) => {
 };
 
 const getMetaTags = () => {
+  window.addEventListener("popstate", getMetaTags);
   browser.devtools.inspectedWindow.eval(
     `
     Array.from(document.head.querySelectorAll("meta")).map((tag) => {
@@ -212,12 +227,10 @@ const getMetaTags = () => {
   );
 };
 
-document.addEventListener("DOMContentLoaded", getMetaTags);
-
 browser.runtime.onMessage.addListener((message) => {
   if (message.action === "refresh") {
-    console.log("yooo");
-    browser.devtools.inspectedWindow.eval(`console.log('test');`);
     getMetaTags();
   }
 });
+
+document.addEventListener("DOMContentLoaded", getMetaTags);

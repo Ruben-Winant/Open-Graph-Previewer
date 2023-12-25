@@ -11,7 +11,7 @@
     "scripts": ["/og-previewer-background.js"],
     "persistent": false
   },
-  "permissions": ["activeTab"],
+  "permissions": ["tabs", "activeTab", "storage", "webNavigation"],
   "devtools_page": "devtools/devtools-page.html",
   "browser_action": {
     "default_title": "Open Graph Previewer",
