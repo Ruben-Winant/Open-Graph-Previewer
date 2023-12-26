@@ -3,6 +3,10 @@
  * @returns {string}
  */
 const getBaseUrl = (fullUrl) => {
+  if (undefined === fullUrl) {
+    return undefined;
+  }
+
   const url = new URL(fullUrl);
   let hostname = url.hostname;
 
@@ -13,21 +17,43 @@ const getBaseUrl = (fullUrl) => {
   return hostname;
 };
 
-const handleFacebookData = (tags) => {
-  let recommended = [
-    "og:url",
-    "og:title",
-    "og:description",
-    "og:image",
-    "fb:app_id",
-    "og:type",
-  ];
+/**
+ * @param {string[]} elementsToHide - An array of strings representing the IDs of the elements to be hidden.
+ * @param {string} previewBlock - The ID of the HTML element where the insufficient data message will be displayed.
+ * @param {string} [insufficientMessage="Insufficient data found."] - The message to be displayed when there is insufficient data.
+ */
+const hideElements = (
+  elementsToHide,
+  previewBlock,
+  insufficientMessage = "Insufficient data found."
+) => {
+  elementsToHide.forEach((id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.style.display = "none";
+    }
+  });
 
+  const previewElement = document.getElementById(previewBlock);
+  if (previewElement) {
+    previewElement.innerHTML = `<p>${insufficientMessage}</p>`;
+  }
+};
+
+/**
+ * @param {Object} tags - An object containing key-value pairs representing the tags.
+ * @param {Array} recommendedTags - An array of strings representing the recommended tags.
+ * @param {HTMLElement} recommendedBlock - The HTML element where the recommended tags will be displayed.
+ * @returns {boolean} - `true` if at least one recommended tag is missing from the `tags` object, `false` otherwise.
+ */
+const handleRecommendations = (tags, recommendedTags, recommendedBlock) => {
+  const recoms = recommendedBlock.querySelector("ul");
   let recomsFound = false;
-  let recoms = document.querySelector("#fb_recommendations ul");
+
   recoms.innerHTML = "";
-  recommended.forEach((recommendation) => {
-    if (undefined === tags[recommendation]) {
+
+  recommendedTags.forEach((recommendation) => {
+    if (!tags.hasOwnProperty(recommendation)) {
       recomsFound = true;
       let li = document.createElement("li");
       li.textContent = recommendation;
@@ -35,20 +61,60 @@ const handleFacebookData = (tags) => {
     }
   });
 
-  const fb_links = document.getElementById("fb_links");
-  const fb_article = document.getElementById("fb_article");
-  const facebook_previews = document.getElementById("facebook_previews");
+  return recomsFound;
+};
+
+/**
+ * @param {object} tags - An object containing the meta tags extracted from the webpage.
+ */
+const handleFacebookData = (tags) => {
+  if (undefined === tags["og:title"] || undefined === tags["og:url"]) {
+    hideElements(
+      ["fb_links", "fb_article"],
+      "facebook_previews",
+      "Insufficient data found. Missing: og:title, fb_article"
+    );
+    return;
+  }
+
   const fb_recommendations = document.getElementById("fb_recommendations");
+  const cardType = tags["og:type"];
+
+  let recommended = [
+    "og:url",
+    "og:title",
+    "og:description",
+    "og:image",
+    "fb:app_id",
+    "og:type",
+    "og:locale",
+  ];
+
+  let recomsFound = false;
+  switch (cardType) {
+    case "link":
+      document.getElementById("fb_links").style.display = "block";
+      document.getElementById("fb_article").style.display = "none";
+      recomsFound = handleRecommendations(
+        tags,
+        recommended,
+        fb_recommendations
+      );
+      break;
+
+    default:
+      document.getElementById("fb_links").style.display = "none";
+      document.getElementById("fb_article").style.display = "block";
+      recomsFound = handleRecommendations(
+        tags,
+        recommended,
+        fb_recommendations
+      );
+      break;
+  }
 
   if (recomsFound) {
     fb_recommendations.style.display = "block";
-  }
-
-  if (undefined === tags["og:title"]) {
-    fb_article.style.display = "none";
-    fb_links.style.display = "none";
-    facebook_previews.innerHTML = "<p>Insufficient data found.</p>";
-    return;
   }
 
   // Images
@@ -76,61 +142,71 @@ const handleFacebookData = (tags) => {
   document
     .querySelectorAll(".link_description_light, .link_description_dark")
     .forEach((el) => (el.textContent = tags["og:description"]));
-
-  // Show either link or article styling
-  switch (tags["og:type"]) {
-    case "link":
-      fb_links.style.display = "block";
-      fb_article.style.display = "none";
-      break;
-    default:
-      fb_links.style.display = "none";
-      fb_article.style.display = "block";
-      break;
-  }
 };
 
+/**
+ * @param {object} tags - An object containing the meta tags extracted from the webpage.
+ */
 const handleTwitterData = (tags) => {
-  let recommended = [
+  if (
+    undefined === tags["twitter:card"] ||
+    undefined === tags["twitter:title"]
+  ) {
+    hideElements(
+      ["x_light_card", "x_dim_card", "x_dark_card"],
+      "x_previews",
+      "Insufficient data found. Missing: twitter:card, twitter:title"
+    );
+    return;
+  }
+
+  const x_recommendations = document.getElementById("x_recommendations");
+  const cardType = tags["twitter:card"];
+
+  const recommended = [
     "og:url",
     "og:title",
     "og:description",
-    "twitter:site",
     "twitter:description",
     "twitter:image",
+    "twitter:card",
+    "twitter:title",
+    "og:locale",
   ];
 
   let recomsFound = false;
-  let recoms = document.querySelector("#x_recommendations ul");
-  recoms.innerHTML = "";
-  recommended.forEach((recommendation) => {
-    if (undefined === tags[recommendation]) {
-      recomsFound = true;
-      let li = document.createElement("li");
-      li.textContent = recommendation;
-      recoms.appendChild(li);
-    }
-  });
+  switch (cardType) {
+    case "player":
+      recommended.push(
+        "twitter:site",
+        "twitter:player",
+        "twitter:player:width",
+        "twitter:player:height",
+        "twitter:image"
+      );
+      recomsFound = handleRecommendations(tags, recommended, x_recommendations);
+      break;
 
-  const x_light_card = document.getElementById("x_light_card");
-  const x_dim_card = document.getElementById("x_dim_card");
-  const x_dark_card = document.getElementById("x_dark_card");
-  const x_previews = document.getElementById("x_previews");
-  const x_recommendations = document.getElementById("x_recommendations");
+    case "app":
+      recommended.push(
+        "twitter:app:id:iphone",
+        "twitter:app:id:ipad",
+        "twitter:app:id:googleplay"
+      );
+      recomsFound = handleRecommendations(tags, recommended, x_recommendations);
+      break;
+
+    case "summary_large_image":
+      recomsFound = handleRecommendations(tags, recommended, x_recommendations);
+      break;
+
+    case "summary":
+      recomsFound = handleRecommendations(tags, recommended, x_recommendations);
+      break;
+  }
 
   if (recomsFound) {
     x_recommendations.style.display = "block";
-  }
-
-  if (
-    undefined === tags["twitter:title"] ||
-    undefined === tags["twitter:card"]
-  ) {
-    x_light_card.style.display = "none";
-    x_dim_card.style.display = "none";
-    x_dark_card.style.display = "none";
-    x_previews.innerHTML = "<p>Insufficient data found.</p>";
-    return;
   }
 
   // Images
@@ -164,8 +240,6 @@ const handleTwitterData = (tags) => {
       ".twitter_link_description_light, .twitter_link_description_dim, .twitter_link_description_dark"
     )
     .forEach((el) => (el.textContent = tags["og:description"]));
-
-  // Todo add switch to go over all possible card types and add designs
 };
 
 /**
