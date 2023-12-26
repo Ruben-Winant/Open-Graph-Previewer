@@ -5,7 +5,7 @@
   "version": "0.0.2",
   "author": "Ruben Winant",
   "icons": {
-    "48": "icons/star.png"
+    "48": "icons/eye.png"
   },
   "background": {
     "scripts": ["/og-previewer-background.js"],
