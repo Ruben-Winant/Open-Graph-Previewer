@@ -1,21 +1,26 @@
 {
   "description": "Preview how your website looks on social media with every Open Graph configuration, instantly.",
-  "manifest_version": 3,
+  "manifest_version": 2,
   "name": "Open Graph Previewer",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "author": "Ruben Winant",
   "icons": {
     "48": "icons/eye.png"
   },
   "background": {
-    "scripts": ["/background.js"],
-    "service_worker": "/background.js"
+    "scripts": ["/background.js"]
   },
   "permissions": ["tabs", "activeTab", "storage", "webNavigation"],
   "devtools_page": "devtools/devtools-page.html",
-  "action": {
+  "browser_action": {
     "default_title": "Open Graph Previewer",
     "default_popup": "popup/info.html"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "ruben.winant@hotmail.com",
+      "strict_min_version": "57.0"
+    }
   },
   "developer": {
     "name": "Ruben Winant",
