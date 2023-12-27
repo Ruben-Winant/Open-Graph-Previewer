@@ -9,9 +9,13 @@
 
 <body>
   <h1>Open Graph Previewer</h1>
-  <p id="test">This extension is in active development, if you encouter any bugs or want to request a new feature feel
-    free
-    to shoot me a message on <a href="https://twitter.com/ruben_winant">X</a></p>
+  <ul>
+    <li>This extension is in active development, </li>
+    <li>Some sites don't automatically refresh their meta tags, therefore i added an instant refresh on page load
+      for the following sites: youtube, twitch.</li>
+    <li>In case of bugs, feature requests, annoyances, etc. Free to shoot me a message on <a
+        href="https://twitter.com/ruben_winant">X</a></li>
+  </ul>
 
   <section class="tabContainer">
     <div class="tabset">
@@ -41,6 +45,8 @@
       </label>
       <div class="tab-panels">
         <section id="default" class="tab-panel">
+          <h4>Open Graph tags found:</h4>
+          <br>
           <table id="tagTable">
             <tr>
               <th>Name/Property</th>
@@ -52,6 +58,7 @@
           <h4>Previews</h4>
           <br>
           <div id="facebook_previews">
+            <span id="fb_error"></span>
             <div id="fb_links">
               <div class="fb_link_container_outer_light">
                 <div class="square_image_container_light">
@@ -121,48 +128,94 @@
           <h4>Previews</h4>
           <br>
           <div id="x_previews">
-            <!-- Light theme -->
-            <div id="x_light_card" class="twitter_article_container_outer_light">
-              <div class="twitter_image_container">
-                <img src="" alt="" srcset="">
+            <span id="x_error"></span>
+            <div id="x_previews_large_summary">
+              <!-- Large summary light theme -->
+              <div class="twitter_large_summary_container_light">
+                <span class="twitter_site_domain_label"></span>
+                <img src="" alt="">
               </div>
-              <div class="twitter_text_container_light">
-                <span class="twitter_site_domain_light"></span>
-                <br>
-                <span class="twitter_link_title_light"></span>
-                <br>
-                <span class="twitter_link_description_light">
-                </span>
+              <br>
+              <!-- Large summary dim theme -->
+              <div class="twitter_large_summary_container_dim">
+                <span class="twitter_site_domain_label"></span>
+                <img src="" alt="">
               </div>
-            </div>
-            <br>
-            <!-- Dim theme -->
-            <div id="x_dim_card" class="twitter_article_container_outer_dim">
-              <div class="twitter_image_container_dim">
-                <img src="" alt="" srcset="">
-              </div>
-              <div class="twitter_text_container_dim">
-                <span class="twitter_site_domain_dim"></span>
-                <br>
-                <span class="twitter_link_title_dim"></span>
-                <br>
-                <span class="twitter_link_description_dim">
-                </span>
+              <br>
+              <!-- Large summary dark theme -->
+              <div class="twitter_large_summary_container_dark">
+                <span class="twitter_site_domain_label"></span>
+                <img src="" alt="">
               </div>
             </div>
-            <br>
-            <!-- Dark theme -->
-            <div id="x_dark_card" class="twitter_article_container_outer_dark">
-              <div class="twitter_image_container_dark">
-                <img src="" alt="" srcset="">
+            <div id="x_previews_summary">
+              <!-- Light theme -->
+              <div id="x_light_card" class="twitter_article_container_outer_light">
+                <div class="twitter_image_container">
+                  <div class="play_icon">
+                    <svg viewBox="0 0 60 61" aria-hidden="true">
+                      <g>
+                        <circle cx="30" cy="30.4219" fill="#333333" opacity="0.6" r="30"></circle>
+                        <path d="M22.2275 17.1971V43.6465L43.0304 30.4218L22.2275 17.1971Z" fill="white"></path>
+                      </g>
+                    </svg>
+                  </div>
+                  <img src="" alt="" srcset="">
+                </div>
+                <div class="twitter_text_container_light">
+                  <span class="twitter_site_domain_light"></span>
+                  <br>
+                  <span class="twitter_link_title_light"></span>
+                  <br>
+                  <span class="twitter_link_description_light">
+                  </span>
+                </div>
               </div>
-              <div class="twitter_text_container_dark">
-                <span class="twitter_site_domain_dark"></span>
-                <br>
-                <span class="twitter_link_title_dark"></span>
-                <br>
-                <span class="twitter_link_description_dark">
-                </span>
+              <br>
+              <!-- Dim theme -->
+              <div id="x_dim_card" class="twitter_article_container_outer_dim">
+                <div class="twitter_image_container_dim">
+                  <div class="play_icon">
+                    <svg viewBox="0 0 60 61" aria-hidden="true">
+                      <g>
+                        <circle cx="30" cy="30.4219" fill="#333333" opacity="0.6" r="30"></circle>
+                        <path d="M22.2275 17.1971V43.6465L43.0304 30.4218L22.2275 17.1971Z" fill="white"></path>
+                      </g>
+                    </svg>
+                  </div>
+                  <img src="" alt="" srcset="">
+                </div>
+                <div class="twitter_text_container_dim">
+                  <span class="twitter_site_domain_dim"></span>
+                  <br>
+                  <span class="twitter_link_title_dim"></span>
+                  <br>
+                  <span class="twitter_link_description_dim">
+                  </span>
+                </div>
+              </div>
+              <br>
+              <!-- Dark theme -->
+              <div id="x_dark_card" class="twitter_article_container_outer_dark">
+                <div class="twitter_image_container_dark">
+                  <div class="play_icon">
+                    <svg viewBox="0 0 60 61" aria-hidden="true">
+                      <g>
+                        <circle cx="30" cy="30.4219" fill="#333333" opacity="0.6" r="30"></circle>
+                        <path d="M22.2275 17.1971V43.6465L43.0304 30.4218L22.2275 17.1971Z" fill="white"></path>
+                      </g>
+                    </svg>
+                  </div>
+                  <img src="" alt="" srcset="">
+                </div>
+                <div class="twitter_text_container_dark">
+                  <span class="twitter_site_domain_dark"></span>
+                  <br>
+                  <span class="twitter_link_title_dark"></span>
+                  <br>
+                  <span class="twitter_link_description_dark">
+                  </span>
+                </div>
               </div>
             </div>
           </div>

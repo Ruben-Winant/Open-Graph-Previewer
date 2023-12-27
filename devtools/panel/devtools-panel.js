@@ -36,7 +36,7 @@ const hideElements = (
 
   const previewElement = document.getElementById(previewBlock);
   if (previewElement) {
-    previewElement.innerHTML = `<p>${insufficientMessage}</p>`;
+    previewElement.textContent = insufficientMessage;
   }
 };
 
@@ -71,11 +71,13 @@ const handleFacebookData = (tags) => {
   if (undefined === tags["og:title"] || undefined === tags["og:url"]) {
     hideElements(
       ["fb_links", "fb_article"],
-      "facebook_previews",
+      "fb_error",
       "Insufficient data found. Missing: og:title, fb_article"
     );
     return;
   }
+
+  document.getElementById("fb_error").textContent = "";
 
   const fb_recommendations = document.getElementById("fb_recommendations");
   const cardType = tags["og:type"];
@@ -87,7 +89,6 @@ const handleFacebookData = (tags) => {
     "og:image",
     "fb:app_id",
     "og:type",
-    "og:locale",
   ];
 
   let recomsFound = false;
@@ -148,21 +149,19 @@ const handleFacebookData = (tags) => {
  * @param {object} tags - An object containing the meta tags extracted from the webpage.
  */
 const handleTwitterData = (tags) => {
-  if (
-    undefined === tags["twitter:card"] ||
-    undefined === tags["twitter:title"]
-  ) {
+  const cardType = tags["twitter:card"];
+  if (undefined === cardType) {
     hideElements(
-      ["x_light_card", "x_dim_card", "x_dark_card"],
-      "x_previews",
+      ["x_previews_large_summary", "x_previews_summary"],
+      "x_error",
       "Insufficient data found. Missing: twitter:card, twitter:title"
     );
     return;
   }
 
-  const x_recommendations = document.getElementById("x_recommendations");
-  const cardType = tags["twitter:card"];
+  document.getElementById("x_error").textContent = "";
 
+  const x_recommendations = document.getElementById("x_recommendations");
   const recommended = [
     "og:url",
     "og:title",
@@ -171,7 +170,6 @@ const handleTwitterData = (tags) => {
     "twitter:image",
     "twitter:card",
     "twitter:title",
-    "og:locale",
   ];
 
   let recomsFound = false;
@@ -185,6 +183,12 @@ const handleTwitterData = (tags) => {
         "twitter:image"
       );
       recomsFound = handleRecommendations(tags, recommended, x_recommendations);
+      document
+        .querySelectorAll(".play_icon")
+        .forEach((el) => (el.style.display = "block"));
+      document.getElementById("x_previews_large_summary").style.display =
+        "none";
+      document.getElementById("x_previews_summary").style.display = "block";
       break;
 
     case "app":
@@ -194,14 +198,23 @@ const handleTwitterData = (tags) => {
         "twitter:app:id:googleplay"
       );
       recomsFound = handleRecommendations(tags, recommended, x_recommendations);
+      document.getElementById("x_previews_large_summary").style.display =
+        "none";
+      document.getElementById("x_previews_summary").style.display = "block";
       break;
 
     case "summary_large_image":
       recomsFound = handleRecommendations(tags, recommended, x_recommendations);
+      document.getElementById("x_previews_large_summary").style.display =
+        "block";
+      document.getElementById("x_previews_summary").style.display = "none";
       break;
 
-    case "summary":
+    default:
       recomsFound = handleRecommendations(tags, recommended, x_recommendations);
+      document.getElementById("x_previews_large_summary").style.display =
+        "none";
+      document.getElementById("x_previews_summary").style.display = "block";
       break;
   }
 
@@ -223,7 +236,7 @@ const handleTwitterData = (tags) => {
   // Url
   document
     .querySelectorAll(
-      ".twitter_site_domain_light, .twitter_site_domain_dim, .twitter_site_domain_dark"
+      ".twitter_site_domain_light, .twitter_site_domain_dim, .twitter_site_domain_dark, .twitter_site_domain_label"
     )
     .forEach((el) => (el.textContent = getBaseUrl(tags["og:url"])));
 
@@ -243,12 +256,15 @@ const handleTwitterData = (tags) => {
 };
 
 /**
- * Adds rows to an HTML table based on the key-value pairs in the `tags` object.
  * @param {Object} tags - An object containing key-value pairs representing the tags.
  */
 const addTableRow = (tags) => {
   const table = document.getElementById("tagTable");
   table.innerHTML = "";
+
+  if (0 === Object.entries(tags).length) {
+    table.innerHTML = "<p>No Open Graph tags found.</p>";
+  }
 
   Object.entries(tags)
     .sort()
@@ -266,8 +282,17 @@ const addTableRow = (tags) => {
     });
 };
 
+/**
+ * @param {string} key - The key to be checked.
+ * @returns {boolean} - True if the key starts with "og:", "fb:", or "twitter:", false otherwise.
+ */
+const checkOGTag = (key) => {
+  return (
+    key.startsWith("og:") || key.startsWith("fb:") || key.startsWith("twitter:")
+  );
+};
+
 const getMetaTags = () => {
-  window.addEventListener("popstate", getMetaTags);
   browser.devtools.inspectedWindow.eval(
     `
     Array.from(document.head.querySelectorAll("meta")).map((tag) => {
@@ -288,11 +313,10 @@ const getMetaTags = () => {
           const key = metaTag.property ?? metaTag.name;
           const value = metaTag.content;
 
-          if (key && value) {
+          if (key && value && checkOGTag(key)) {
             tags[key] = value;
           }
         });
-
         addTableRow(tags);
         handleFacebookData(tags);
         handleTwitterData(tags);
@@ -301,10 +325,12 @@ const getMetaTags = () => {
   );
 };
 
+// Update data whenever the url changes
 browser.runtime.onMessage.addListener((message) => {
   if (message.action === "refresh") {
     getMetaTags();
   }
 });
 
+// Initial data
 document.addEventListener("DOMContentLoaded", getMetaTags);

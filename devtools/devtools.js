@@ -1,5 +1,5 @@
 browser.devtools.panels.create(
   "Open Graph Previewer",
-  "../icons/star.png",
+  "../icons/eye.png",
   "../devtools/panel/panel.html"
 );

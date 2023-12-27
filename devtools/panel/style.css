@@ -8,55 +8,41 @@
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
+h1,
+h2,
+h3,
+h4 {
+  margin-bottom: 0;
+}
+
 h1 {
   font-size: 1.476rem;
-  margin-bottom: 0;
 }
-
 h2 {
   font-size: 1.383rem;
-  margin-bottom: 0;
 }
-
 h3 {
   font-size: 1.296rem;
-  margin-bottom: 0;
 }
-
 h4 {
   font-size: 1.215rem;
-  margin-bottom: 0;
 }
 
 p,
 span {
   font-size: 1rem;
 }
-
 small {
   font-size: 0.937rem;
 }
 
-body {
-  padding: 0.25rem 0.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap);
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap);
-}
-
+body,
+form,
 fieldset {
-  border: none;
   display: flex;
   flex-direction: column;
   gap: var(--gap);
-  margin: 0;
-  padding: 0;
+  padding: 0.25rem 0.5rem;
 }
 
 button {
@@ -90,13 +76,13 @@ table {
 
 td,
 th {
-  border: 1px solid #dddddd;
+  border: 1px solid #d3d3d3;
   text-align: left;
   padding: 8px;
 }
 
 tr:nth-child(even) {
-  background-color: #dddddd;
+  background-color: #f8edff;
 }
 
 .tabContainer {
@@ -152,33 +138,26 @@ credits for the code below: https://codepen.io/markcaron/pen/MvGRYV
 .tabset > input:checked + label {
   fill: var(--primary-color);
 }
-
 #fb_recommendations,
 #x_recommendations {
   display: none;
 }
 
-/* Light Theme fb article */
-.fb_article_container_outer_light {
-  display: flex;
-  flex-direction: column;
-  background-color: #f2f3f5;
-  border: 1px solid #dddfe2;
-  max-width: 680px;
-}
-
-.rectangle_image_container_light {
-  display: flex;
-  border-right: 1px solid #dddfe2;
-}
-
-/* Dark Theme fb article */
+.fb_article_container_outer_light,
 .fb_article_container_outer_dark {
   display: flex;
   flex-direction: column;
+  max-width: 680px;
+}
+
+.fb_article_container_outer_light {
+  background-color: #f2f3f5;
+  border: 1px solid #dddfe2;
+}
+
+.fb_article_container_outer_dark {
   background-color: #3a3b3c;
   border: 1px solid rgba(255, 255, 255, 0.05);
-  max-width: 680px;
 }
 
 .rectangle_image_container_light {
@@ -312,6 +291,52 @@ credits for the code below: https://codepen.io/markcaron/pen/MvGRYV
   width: 100%;
 }
 
+.twitter_large_summary_container_light,
+.twitter_large_summary_container_dim,
+.twitter_large_summary_container_dark {
+  max-width: 510px;
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 16/8.5;
+  position: relative;
+}
+
+.twitter_large_summary_container_light {
+  border: 1px solid rgb(207, 217, 222);
+}
+
+.twitter_large_summary_container_dim {
+  border: 1px solid #38444d;
+}
+
+.twitter_large_summary_container_dark {
+  border: 1px solid #2f3336;
+}
+
+.twitter_large_summary_container_light img,
+.twitter_large_summary_container_dim img,
+.twitter_large_summary_container_dark img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.twitter_site_domain_label {
+  background-color: rgba(0, 0, 0, 0.3);
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 100;
+  height: 20px;
+  padding: 0 4px;
+  align-self: flex-start;
+  color: #ffffff;
+  font-size: 13px;
+  line-height: 18px;
+  text-align: center;
+  border-radius: 4px;
+}
+
 /* X light theme */
 .twitter_article_container_outer_light {
   display: flex;
@@ -324,6 +349,9 @@ credits for the code below: https://codepen.io/markcaron/pen/MvGRYV
 .twitter_image_container {
   display: flex;
   border-right: 1px solid #dddfe2;
+  position: relative;
+  justify-content: center;
+  align-items: center;
 }
 
 .twitter_image_container img,
@@ -386,6 +414,9 @@ credits for the code below: https://codepen.io/markcaron/pen/MvGRYV
 .twitter_image_container_dim {
   display: flex;
   border-right: 1px solid #38444d;
+  position: relative;
+  justify-content: center;
+  align-items: center;
 }
 
 .twitter_site_domain_dim {
@@ -428,6 +459,9 @@ credits for the code below: https://codepen.io/markcaron/pen/MvGRYV
 .twitter_image_container_dark {
   display: flex;
   border-right: 1px solid #2f3336;
+  position: relative;
+  justify-content: center;
+  align-items: center;
 }
 
 .twitter_site_domain_dark {
@@ -477,4 +511,13 @@ credits for the code below: https://codepen.io/markcaron/pen/MvGRYV
   .twitter_link_description_dark {
     display: none;
   }
+}
+
+.play_icon {
+  position: absolute;
+  z-index: 1;
+  width: 60px;
+  height: 60px;
+  margin: auto;
+  display: none;
 }
