@@ -72,7 +72,7 @@ const handleFacebookData = (tags) => {
     hideElements(
       ["fb_links", "fb_article"],
       "fb_error",
-      "Insufficient data found. Missing: og:title, fb_article"
+      "Insufficient data found. Make sure the following tags are present: og:title, fb_article"
     );
     return;
   }
@@ -154,7 +154,7 @@ const handleTwitterData = (tags) => {
     hideElements(
       ["x_previews_large_summary", "x_previews_summary"],
       "x_error",
-      "Insufficient data found. Missing: twitter:card, twitter:title"
+      "Insufficient data found. Make sure the following tags are present: twitter:card, twitter:title"
     );
     return;
   }
@@ -230,7 +230,7 @@ const handleTwitterData = (tags) => {
   } else {
     document
       .querySelectorAll("#x img")
-      .forEach((el) => (el.src = tags["og:image"]));
+      .forEach((el) => (el.src = tags["twitter:image"] ?? tags["og:image"]));
   }
 
   // Url
@@ -238,21 +238,28 @@ const handleTwitterData = (tags) => {
     .querySelectorAll(
       ".twitter_site_domain_light, .twitter_site_domain_dim, .twitter_site_domain_dark, .twitter_site_domain_label"
     )
-    .forEach((el) => (el.textContent = getBaseUrl(tags["og:url"])));
+    .forEach(
+      (el) => (el.textContent = getBaseUrl(tags["og:url"] ?? tags["site_name"]))
+    );
 
   // Title
   document
     .querySelectorAll(
       ".twitter_link_title_light, .twitter_link_title_dim, .twitter_link_title_dark"
     )
-    .forEach((el) => (el.textContent = tags["twitter:title"]));
+    .forEach(
+      (el) => (el.textContent = tags["twitter:title"] ?? tags["og:title"])
+    );
 
   // Description
   document
     .querySelectorAll(
       ".twitter_link_description_light, .twitter_link_description_dim, .twitter_link_description_dark"
     )
-    .forEach((el) => (el.textContent = tags["og:description"]));
+    .forEach(
+      (el) =>
+        (el.textContent = tags["twitter:description"] ?? tags["og:description"])
+    );
 };
 
 /**
@@ -327,8 +334,21 @@ const getMetaTags = () => {
 
 // Update data whenever the url changes
 browser.runtime.onMessage.addListener((message) => {
-  if (message.action === "refresh") {
+  if (message.action === "refresh" || message.action === "turnedon") {
     getMetaTags();
+  }
+
+  if (message.action === "turnedoff") {
+    hideElements(
+      ["x_previews_large_summary", "x_previews_summary"],
+      "x_error",
+      "Extension disbled, turn on to view data."
+    );
+    hideElements(
+      ["fb_links", "fb_article"],
+      "fb_error",
+      "Extension disbled, turn on to view data."
+    );
   }
 });
 
